@@ -28,7 +28,7 @@ export const changeAmount = (amount) => ({
   payload: amount,
 });
 
-export const changeCurrency = (currencyCode) => ({
+export const changeCurrencyCode = (currencyCode) => ({
   type: CURRENCY_CODE_CHANGED,
   payload: currencyCode,
 });
