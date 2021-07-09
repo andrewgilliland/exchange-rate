@@ -8,3 +8,5 @@ export const store = createStore(
     rates: ratesReducer,
   })
 );
+
+
