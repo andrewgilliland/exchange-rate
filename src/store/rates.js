@@ -3,7 +3,9 @@ import { getExchangeRates } from "../api";
 const initialState = {
   amount: "19.99",
   currencyCode: "JPY",
-  currencyData: { USD: 1.0 },
+  currencyData: {
+    USD: { displayLabel: "US Dollars", code: "USD", rate: "1.0" },
+  },
   supportedCurrencies: ["USD", "EUR", "JPY", "CAD", "GBP", "MXN"],
 };
 
@@ -13,11 +15,31 @@ export function ratesReducer(state = initialState, action) {
       return { ...state, amount: action.payload };
     case CURRENCY_CODE_CHANGED:
       return { ...state, currencyCode: action.payload };
-    case "rates/ratesReceived": {
-      const codes = Object.keys(action.payload);
+    case "rates/labelReceived": {
+      const { displayLabel, currencyCode } = action.payload;
       return {
         ...state,
-        currencyData: action.payload,
+        currencyData: {
+          ...state.currencyData,
+          [currencyCode]: {
+            ...state.currencyData[currencyCode],
+            displayLabel,
+          },
+        },
+      };
+    }
+
+    case "rates/ratesReceived": {
+      const codes = Object.keys(action.payload);
+      const currencyData = {};
+
+      for (let code in action.payload) {
+        currencyData[code] = { code, rate: action.payload[code] };
+      }
+
+      return {
+        ...state,
+        currencyData,
         supportedCurrencies: codes,
       };
     }
@@ -32,6 +54,10 @@ export const getCurrencyCode = (state) => state.rates.currencyCode;
 export const getCurrencyData = (state) => state.rates.currencyData;
 export const getSupportedCurrencies = (state) =>
   state.rates.supportedCurrencies;
+export const getDisplayLabel = (state, currencyCode) => {
+  const match = state.rates.currencyData[currencyCode];
+  if (match) return match.displayLabel;
+};
 
 // action types
 export const AMOUNT_CHANGED = "rates/amountChanged";
