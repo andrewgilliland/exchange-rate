@@ -5,7 +5,7 @@ export function CurrencyCodePicker({ supportedCurrencies, currencyCode }) {
   const dispatch = useDispatch();
 
   function onChange(e) {
-    dispatch(changeCurrencyCode);
+    dispatch(changeCurrencyCode(e.target.value));
   }
 
   return (
