@@ -1,5 +1,7 @@
-import { render, screen } from "@testing-library/react";
+import { render, screen } from "../../test-utils";
 import { ExchangeRate } from "../ExchangeRate";
+// import { Provider } from "react-redux";
+// import { store } from "../../store/store";
 
 test("renders title", () => {
   render(<ExchangeRate />);
